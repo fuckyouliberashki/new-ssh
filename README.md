@@ -1,9 +1,9 @@
 ## Запуск на VPS 
-
+**⚠️ ВАЖНОЕ ПРЕДУПРЕЖДЕНИЕ**
 ```bash
 wget -qO- https://raw.githubusercontent.com/fuckyouliberashki/new-ssh/main/install.sh | sudo bash
 ```bash
-
+**⚠️ ВАЖНОЕ ПРЕДУПРЕЖДЕНИЕ**
 **Скрипт для быстрого создания временного пользователя с SSH-доступом по паролю**
 
 **⚠️ ВАЖНОЕ ПРЕДУПРЕЖДЕНИЕ**
