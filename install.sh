@@ -1,21 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Можно менять префикс
 PREFIX="tunnel"
+SUFFIX=$(date +%s | base64 | tr -dc 'a-zA-Z0-9' | head -c 9)
+USER="${PREFIX}-${SUFFIX}"
 
-# Генерируем уникальное имя
-SUFFIX=$(date +%s | base64 | head -c 8 | tr '+/=' 'abc')
-USER="$$   {PREFIX}-   $${SUFFIX}"
+echo "Создаём пользователя: $USER"
 
-echo "Создаём: $USER"
+useradd -s /bin/false "$USER" || { echo "Ошибка создания пользователя"; exit 1; }
 
-useradd -s /bin/false "$USER" 2>/dev/null || { echo "Ошибка создания"; exit 1; }
+PASS=$(tr -dc 'A-Za-z0-9!?@#$%^&*+' </dev/urandom | head -c 17)
 
-PASS=$$   (tr -dc 'A-Za-z0-9!?@#   $$%^&*+' </dev/urandom | head -c 17)
 echo "$USER:$PASS" | chpasswd
 
-# Ограничение в sshd_config
+# Добавляем правило в sshd_config (если ещё нет похожего — не страшно, дубли можно потом убрать)
 cat >> /etc/ssh/sshd_config <<EOF
 
 Match User $USER
@@ -24,10 +22,20 @@ Match User $USER
     ForceCommand /bin/false
 EOF
 
-systemctl restart ssh 2>/dev/null || service ssh restart
+systemctl restart ssh 2>/dev/null || service ssh restart 2>/dev/null
 
-echo
-echo "Готово!"
+clear
+
+echo ""
+echo "╔════════════════════════════════════════════╗"
+echo "║         НОВЫЙ ТУННЕЛЬНЫЙ ПОЛЬЗОВАТЕЛЬ      ║"
+echo "╚════════════════════════════════════════════╝"
+echo ""
 echo "Логин:     $USER"
 echo "Пароль:    $PASS"
-echo "ssh -N -D 1080 $USER@твой-ip"
+echo ""
+echo "Подключение SOCKS5:"
+echo "  ssh -N -D 1080 $USER@твой-ip-адрес"
+echo ""
+echo "!!! Скопируй пароль прямо сейчас !!!"
+echo ""
