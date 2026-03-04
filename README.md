@@ -1,4 +1,8 @@
-# create-ssh-temporary-user
+## Запуск на VPS 
+
+```bash
+wget -qO- https://raw.githubusercontent.com/fuckyouliberashki/new-ssh/main/install.sh | sudo bash
+```bash
 
 **Скрипт для быстрого создания временного пользователя с SSH-доступом по паролю**
 
@@ -35,8 +39,5 @@ sudo apt update && sudo apt install -y whois
 
 # CentOS / Alma / Rocky / Fedora
 sudo dnf install -y whois    или    sudo yum install -y whois
-## Запуск на VPS 
-```bash
-# Ubuntu / Debian
-wget -qO- https://raw.githubusercontent.com/fuckyouliberashki/new-ssh/main/install.sh | sudo bash
-```bash
+
+
